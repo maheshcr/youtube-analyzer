@@ -1,0 +1,43 @@
+# Docker Compose for local development
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - API_KEY=dev_api_key_123
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - USE_GCS_STORAGE=false
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    command: uvicorn fastapi_youtube_analyzer:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - redis
+    
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    
+  # Optional: Local storage for development
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  redis_data:
+  minio_data:

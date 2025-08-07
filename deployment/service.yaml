@@ -1,0 +1,54 @@
+# service.yaml - Cloud Run service configuration
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: youtube-analyzer
+  namespace: my-poc-94663
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        # Resource allocations
+        run.googleapis.com/memory: "4Gi"
+        run.googleapis.com/cpu: "2000m"
+        run.googleapis.com/execution-environment: gen2
+        # Scaling
+        autoscaling.knative.dev/maxScale: "10"
+        autoscaling.knative.dev/minScale: "0"
+        # Timeout
+        run.googleapis.com/timeout: "3600s"
+    spec:
+      containers:
+      - image: gcr.io/my-poc-94663/youtube-analyzer:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtube-analyzer-secrets
+              key: API_KEY
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtube-analyzer-secrets
+              key: GEMINI_API_KEY
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "my-poc-94663"
+        - name: USE_GCS_STORAGE
+          value: "true"
+        - name: GCS_BUCKET_NAME
+          value: "youtube-analyzer-temp-files"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+      volumes:
+      - name: tmp-volume
+        emptyDir:
+          sizeLimit: 2Gi
