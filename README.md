@@ -98,7 +98,7 @@ The application consists of two main versions:
 2. **Or build and run manually**
    ```bash
    docker build -t youtube-analyzer .
-   docker run -p 8000:8000 --env-file .env youtube-analyzer
+   docker run -p 8080:8080 --env-file .env youtube-analyzer
    ```
 
 ## Testing
@@ -127,7 +127,7 @@ python3 test_api.py
 
 2. **Start Analysis**
    ```bash
-   curl -X POST http://localhost:8000/analyze-video/ \
+   curl -X POST http://localhost:8080/analyze-video/ \
      -H "X-API-Key: your_api_key_here" \
      -H "Content-Type: application/json" \
      -d '{"youtube_url": "https://www.youtube.com/watch?v=jNQXAC9IVRw"}'
@@ -135,7 +135,7 @@ python3 test_api.py
 
 3. **Check Status**
    ```bash
-   curl http://localhost:8000/task-status/{task_id} \
+   curl http://localhost:8080/task-status/{task_id} \
      -H "X-API-Key: your_api_key_here"
    ```
 
@@ -167,7 +167,7 @@ The application is ready for deployment on Hetzner with Coolify. Here's what you
    - Create new service in Coolify
    - Use the Dockerfile from this repository
    - Set environment variables
-   - Configure port 8000
+   - Configure port 8080
    - Set resource limits (recommended: 2GB RAM, 1 CPU)
 
 3. **Configure Domain/Proxy**

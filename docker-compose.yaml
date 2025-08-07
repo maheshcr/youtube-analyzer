@@ -5,7 +5,7 @@ services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       - ENVIRONMENT=development
       - API_KEY=dev_api_key_123
@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/app
       - /app/__pycache__
-    command: uvicorn fastapi_youtube_analyzer:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn fastapi_youtube_analyzer:app --host 0.0.0.0 --port 8080 --reload
     depends_on:
       - redis
     
