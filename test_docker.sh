@@ -55,7 +55,7 @@ sleep 10
 # Check if application is running
 echo "🔍 Checking application health..."
 for i in {1..30}; do
-    if curl -f http://localhost:8080/health >/dev/null 2>&1; then
+    if curl -f http://localhost:8123/health >/dev/null 2>&1; then
         echo "✅ Application is running!"
         break
     fi
@@ -65,7 +65,7 @@ done
 
 # Test the application
 echo "🧪 Running tests..."
-export API_BASE_URL=http://localhost:8080
+export API_BASE_URL=http://localhost:8123
 export API_KEY=dev_api_key_123
 python3 test_api.py
 

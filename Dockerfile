@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PORT=8080
+ENV PORT=8123
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -31,11 +31,11 @@ RUN useradd --create-home --shell /bin/bash app && \
 USER app
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8123
 
 # Health check
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=5 \
-    CMD curl -f http://localhost:8080/health || exit 1
+    CMD curl -f http://localhost:8123/health || exit 1
 
 # Run the application
 CMD exec uvicorn fastapi_youtube_analyzer_local_storage:app --host 0.0.0.0 --port $PORT

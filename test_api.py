@@ -225,7 +225,7 @@ class YouTubeAnalyzerTester:
 
 def main():
     # Configuration
-    base_url = os.getenv('API_BASE_URL', 'http://localhost:8080')
+    base_url = os.getenv('API_BASE_URL', 'http://localhost:8123')
     api_key = os.getenv('API_KEY', 'dev_api_key_123')
     
     # Test YouTube URLs (famous videos that are likely to work)
